@@ -1,17 +1,16 @@
+use std::path::Path;
+
+use crate::wallpapers::set_wallpaper;
+
 mod wallpapers;
 
 fn main() {
 
-        // let output2 = Command::new("gsettings")
-        //     .arg("get")
-        //     .arg("org.gnome.desktop.background")
-        //     .arg("picture-uri")
-        //     .output()
-        //     .expect("Failed to execute command");
-
         let wallpaper = wallpapers::get_current_wallpaper().expect("Failed to get current path");
 
+        println!("Current wallpaper: {wallpaper}");
+        
+        set_wallpaper(Path::new("/home/alexi-dg/Desktop/wallpaper-rs/assets/4.jpeg")).expect("Failed to set wallpaper.");
 
 
-        println!("{wallpaper}");
 }

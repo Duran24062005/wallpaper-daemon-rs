@@ -12,20 +12,27 @@ pub fn get_current_wallpaper() -> Result<String, Box<dyn std::error::Error>> {
 
     let wallpaper = String::from_utf8(output.stdout)?;
 
-    Ok(wallpaper)
+    let wallpaper = wallpaper.trim().trim_matches('\'');
+
+
+    Ok(wallpaper.to_string())
 }
 
 pub fn set_wallpaper(image: &Path) -> Result<(), Box<dyn std::error::Error>> {
     let uri = format!("file://{}", image.canonicalize()?.display());
 
-    Command::new("gsettings")
+    let status = Command::new("gsettings")
         .args([
             "set",
             "org.gnome.desktop.background",
-            "picture-uri",
+            "picture-uri-dark",
             &uri,
         ])
         .status()?;
+
+    if !status.success() {
+        return Err(format!("gsettings failed with status: {status}").into());
+    }
 
     Ok(())
 }
