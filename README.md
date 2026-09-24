@@ -126,4 +126,5 @@ Los commits siguen un estilo tipo *gitmoji* (`feat: :sparkles: ...`).
 
 ## Autor
 
-[Duran24062005](https://github.com/Duran24062005)
+- [Duran24062005](https://github.com/Duran24062005)
+- [ChatGPT Caht](https://chatgpt.com/c/6ab4463f-4d5c-83e9-a69f-f83a61e7322e)
