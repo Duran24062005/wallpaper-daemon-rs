@@ -3,7 +3,7 @@ use std::process::Command;
 
 pub fn get_current_wallpaper() -> Result<String, Box<dyn std::error::Error>> {
     let output = Command::new("gsettings")
-        .args(["get", "org.gnome.desktop.background", "picture-uri"])
+        .args(["get", "org.gnome.desktop.background", "picture-uri-dark"])
         .output()?;
 
     let wallpaper = String::from_utf8(output.stdout)?;
