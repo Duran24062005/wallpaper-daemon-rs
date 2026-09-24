@@ -1,22 +1,21 @@
+use std::path::Path;
+
 mod wallpapers;
 mod scanner;
 mod selector;
 
 fn main() {
+    
+    let images = scanner::scan_images("assets").expect("Failed to scan images.");
 
-    let images = scanner::scan_images("assets")
-        .expect("Failed to scan images");
+    let current  = wallpapers::get_current_wallpaper().expect("Failed to get current wallpaper");
 
-    let image = selector::select_random(&images)
-        .expect("No images found");
+    let current_path = current.strip_prefix("file://").map(Path::new);
 
-    println!("Selected wallpaper: {}", image.display());
-
-    wallpapers::set_wallpaper(image)
-        .expect("Failed to set wallpaper");
-
-    let current = wallpapers::get_current_wallpaper()
-        .expect("Failed to get current wallpaper");
+    let image = selector::select_random(&images, current_path).expect("No alternative wallpapers found.");
 
     println!("Current wallpaper: {current}");
+    println!("Selected wallpaper: {}", image.display());
+
+    wallpapers::set_wallpaper(image).expect("Failed to set wallpaper.");
 }
