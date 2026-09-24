@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
 
-
 pub fn scan_images(directory: &str) -> Result<Vec<PathBuf>, Box<dyn std::error::Error>> {
     let mut images = Vec::new();
 
