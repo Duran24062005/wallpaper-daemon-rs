@@ -28,9 +28,16 @@ fn run_cycle() -> Result<(), WallpaperError>{
 }
 
 fn main() {
+    println!("PATH = {:?}", std::env::var("PATH"));
+
+    let result = std::process::Command::new("/usr/bin/gsettings")
+        .arg("--version")
+        .output();
+
+    println!("gsettings result = {:?}", result);
     loop {
         if let Err(error) = run_cycle(){
-            eprint!("Wallpaper error: {error}");
+            eprintln!("Wallpaper error: {error}");
         }
         scheduler::wait(10);
     }

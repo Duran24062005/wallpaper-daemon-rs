@@ -3,8 +3,10 @@ use std::process::Command;
 
 use crate::error::WallpaperError;
 
+const GSETTINGS: &str = "/usr/bin/gsettings";
+
 pub fn get_current_wallpaper() -> Result<PathBuf, WallpaperError> {
-    let output = Command::new("gsettings")
+    let output = Command::new(GSETTINGS)
         .args([
             "get", 
             "org.gnome.desktop.background", 
@@ -40,7 +42,7 @@ pub fn set_wallpaper(image: &Path) -> Result<(), WallpaperError> {
         source,
     })?.display());
 
-    let status = Command::new("gsettings")
+    let status = Command::new(GSETTINGS)
         .args([
             "set",
             "org.gnome.desktop.background",

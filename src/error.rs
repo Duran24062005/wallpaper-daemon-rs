@@ -6,11 +6,11 @@ use  std::string::FromUtf8Error;
 pub enum WallpaperError {
     
     #[error("failed to execute {command}: {source}")]
-Command {
-    command: &'static str,
-    #[source]
-    source: std::io::Error,
-},
+    Command {
+        command: &'static str,
+        #[source]
+        source: std::io::Error,
+    },
 
     #[error("Invalid UTF-8 output from gsettings: {0}")]
     Utf8(#[from] FromUtf8Error),
