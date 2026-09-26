@@ -1,20 +1,44 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
-pub fn get_current_wallpaper() -> Result<String, Box<dyn std::error::Error>> {
+use crate::error::WallpaperError;
+
+pub fn get_current_wallpaper() -> Result<PathBuf, WallpaperError> {
     let output = Command::new("gsettings")
-        .args(["get", "org.gnome.desktop.background", "picture-uri-dark"])
-        .output()?;
+        .args([
+            "get", 
+            "org.gnome.desktop.background", 
+            "picture-uri-dark"
+        ])
+        .output().map_err(|source| WallpaperError::Command {
+        command: "gsettings",
+        source,
+    })?;
+
+    if !output.status.success() {
+        return Err(WallpaperError::GSettings { 
+            operation: "get", 
+            status: output.status 
+        });
+    }
 
     let wallpaper = String::from_utf8(output.stdout)?;
 
     let wallpaper = wallpaper.trim().trim_matches('\'');
 
-    Ok(wallpaper.to_string())
+    let path = wallpaper.strip_prefix("file://").ok_or_else(|| WallpaperError::InvalidUri(wallpaper.to_string()))?;
+
+    Ok(Path::new(path).canonicalize().map_err(|source| WallpaperError::Command {
+        command: "gsettings",
+        source,
+    })?)
 }
 
-pub fn set_wallpaper(image: &Path) -> Result<(), Box<dyn std::error::Error>> {
-    let uri = format!("file://{}", image.canonicalize()?.display());
+pub fn set_wallpaper(image: &Path) -> Result<(), WallpaperError> {
+    let uri = format!("file://{}", image.canonicalize().map_err(|source| WallpaperError::Command {
+        command: "gsettings",
+        source,
+    })?.display());
 
     let status = Command::new("gsettings")
         .args([
@@ -23,10 +47,16 @@ pub fn set_wallpaper(image: &Path) -> Result<(), Box<dyn std::error::Error>> {
             "picture-uri-dark",
             &uri,
         ])
-        .status()?;
+        .status().map_err(|source| WallpaperError::Command {
+        command: "gsettings",
+        source,
+    })?;
 
     if !status.success() {
-        return Err(format!("gsettings failed with status: {status}").into());
+        return Err(WallpaperError::GSettings { 
+            operation: "set", 
+            status
+        });
     }
 
     Ok(())

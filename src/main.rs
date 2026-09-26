@@ -1,28 +1,37 @@
-use std::path::Path;
-
 mod scanner;
 mod selector;
 mod wallpapers;
 mod scheduler;
+mod error;
+
+use error::WallpaperError;
+
+
+fn run_cycle() -> Result<(), WallpaperError>{
+    println!("Changing wallpaper...");
+        
+    let images = scanner::scan_images("assets").map_err(|error| WallpaperError::Scan(error.to_string()))?;
+    
+    let current = wallpapers::get_current_wallpaper()?;
+    
+    let image = selector::select_random(
+        &images, 
+        Some(current.as_path())
+    ).ok_or(WallpaperError::NoAlternative)?;
+    
+    println!("Current wallpaper: {}", current.display());
+    println!("Selected wallpaper: {}", image.display());
+    
+    wallpapers::set_wallpaper(image)?;
+
+    Ok(())
+}
 
 fn main() {
     loop {
-        println!("Changing wallpaper...");
-        
-        let images = scanner::scan_images("assets").expect("Failed to scan images.");
-    
-        let current = wallpapers::get_current_wallpaper().expect("Failed to get current wallpaper");
-    
-        let current_path = current.strip_prefix("file://").map(Path::new);
-    
-        let image =
-            selector::select_random(&images, current_path).expect("No alternative wallpapers found.");
-    
-        println!("Current wallpaper: {current}");
-        println!("Selected wallpaper: {}", image.display());
-    
-        wallpapers::set_wallpaper(image).expect("Failed to set wallpaper.");
-
+        if let Err(error) = run_cycle(){
+            eprint!("Wallpaper error: {error}");
+        }
         scheduler::wait(10);
     }
 }
