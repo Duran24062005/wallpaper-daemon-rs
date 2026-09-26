@@ -96,8 +96,8 @@ wallpaper-daemon-rs/
 │   ├── config.rs            # (vacío, sin declarar) configuración persistente
 │   └── code_templates/      # Fragmentos de referencia, no se compilan
 └── tests/
-    ├── scanner_test.rs      # (vacío)
-    └── wallpaper_test.rs    # (vacío)
+    ├── scanner_test.rs      # reservado para pruebas de integración
+    └── wallpaper_test.rs   # reservado para pruebas de integración
 ```
 
 ## Limitaciones conocidas
@@ -109,9 +109,9 @@ wallpaper-daemon-rs/
 - La URI leída no se decodifica (rutas con espacios u otros caracteres codificados como `%20`).
 - El escaneo **no es recursivo**.
 - **Cualquier error detiene el bucle:** los errores terminan el programa con `expect` (panic) en lugar de mostrar un mensaje amigable o reintentar. Por ejemplo, un fallo puntual de `gsettings`, o una carpeta sin imágenes alternativas.
-- `gsettings get` no comprueba el código de salida.
+- `gsettings get` valida su código de salida y conserva la ruta aunque el archivo ya no exista.
 - Solo GNOME; sin soporte multi-monitor por salida.
-- El módulo `config` y los archivos de `tests/` están vacíos.
+- Las pruebas unitarias viven junto a `scanner` y `wallpapers`; los archivos de `tests/` quedan reservados para futuras pruebas de integración.
 
 ## Roadmap
 
@@ -120,7 +120,7 @@ wallpaper-daemon-rs/
 - [x] Lectura/escritura del fondo con `gsettings`
 - [x] Lectura y escritura sobre la misma clave (`picture-uri-dark`)
 - [x] Bucle de ejecución continua con intervalo fijo (`thread::sleep`)
-- [ ] Corregir las limitaciones restantes (rutas canónicas, soporte de tema claro, decodificación de URI, validar `gsettings get`)
+- [ ] Corregir las limitaciones restantes (rutas canónicas, soporte de tema claro y decodificación de URI)
 - [ ] Manejo de errores propio (`WallpaperError`) en lugar de `expect`
 - [ ] Tests unitarios e integración
 - [ ] Configuración persistente (`~/.config/...`, `serde` + `toml`): carpeta e intervalo configurables
@@ -133,7 +133,7 @@ wallpaper-daemon-rs/
 ```bash
 cargo build      # compilar
 cargo run        # ejecutar (bucle infinito; Ctrl+C para salir)
-cargo test       # ejecutar tests (aún sin casos)
+cargo test       # ejecutar las pruebas unitarias
 cargo fmt        # formatear
 cargo clippy     # lints
 ```
