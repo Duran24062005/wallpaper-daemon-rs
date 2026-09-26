@@ -1,10 +1,8 @@
+use std::string::FromUtf8Error;
 use thiserror::Error;
-use  std::string::FromUtf8Error;
-
 
 #[derive(Debug, Error)]
 pub enum WallpaperError {
-    
     #[error("failed to execute {command}: {source}")]
     Command {
         command: &'static str,
@@ -28,5 +26,5 @@ pub enum WallpaperError {
     },
 
     #[error("no alternative wallpaper found")]
-    NoAlternative
+    NoAlternative,
 }
