@@ -144,3 +144,57 @@ Los commits siguen un estilo tipo *gitmoji* (`feat: :sparkles: ...`).
 
 - [Duran24062005](https://github.com/Duran24062005)
 - [ChatGPT Chat](https://chatgpt.com/c/6ab4463f-4d5c-83e9-a69f-f83a61e7322e)
+
+
+
+```cmd
+wallpaper-daemon-rs
+.
+├── assets
+│   ├── 1.jpeg
+│   ├── 2.jpeg
+│   ├── 3.jpeg
+│   ├── 4.jpeg
+│   ├── 5.jpeg
+│   ├── 6.jpeg
+│   └── 7.jpeg
+├── Cargo.lock
+├── Cargo.toml
+├── development-phase.md
+├── docs
+│   ├── app-context.md
+│   ├── Architecture.md
+│   ├── context.md
+│   ├── develop_idea
+│   │   ├── future.md
+│   │   ├── idea.md
+│   │   └── perplexity.md
+│   ├── task-list.md
+│   └── testing.md
+├── LICENSE
+├── prds
+│   ├── 00-mvp-robustez.md
+│   ├── 01-workspace-y-arquitectura-core.md
+│   ├── 02-deteccion-de-pantallas.md
+│   ├── 03-fondos-por-pantalla.md
+│   ├── 04-video-global.md
+│   ├── 05-video-por-pantalla.md
+│   ├── 06-daemon-cli-e-ipc.md
+│   ├── 07-gui-java.md
+│   └── 08-empaquetado-y-distribucion.md
+├── README.md
+├── src
+│   ├── code_templates
+│   │   ├── mod.rs
+│   │   ├── review.rs
+│   │   └── wallpapers_review.rs
+│   ├── config.rs
+│   ├── error.rs
+│   ├── main.rs
+│   ├── scanner.rs
+│   ├── scheduler.rs
+│   ├── selector.rs
+│   └── wallpapers.rs
+└── tests
+    ├── scanner_test.rs
+    └── wallpaper_test.rs
